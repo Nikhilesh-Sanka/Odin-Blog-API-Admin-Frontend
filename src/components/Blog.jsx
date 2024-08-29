@@ -7,7 +7,7 @@ export function Blog() {
   const [screenStatus, setScreenStatus] = useState({ status: "posts" });
   const { userToken } = useContext(tokenContext);
   function fetchPostsAndCategories() {
-    fetch(`http://localhost:3000/admin/posts`, {
+    fetch(`https://blog-api-odin.adaptable.app/admin/posts`, {
       method: "GET",
       headers: {
         authorization: userToken.token,
@@ -20,9 +20,9 @@ export function Blog() {
         return response.json();
       })
       .then((posts) => setPosts(posts));
-    fetch(`http://localhost:3000/guest/categories`)
+    fetch(`https://blog-api-odin.adaptable.app/guest/categories`)
       .then((response) => response.json())
-      .then((categories) => setCategories(categories.categories))
+      .then((categories) => setCategories(categories))
       .catch((err) => console.error(err));
   }
   useEffect(fetchPostsAndCategories, [screenStatus]);
@@ -88,12 +88,15 @@ function Post(props) {
   }
   async function handleDelete(e) {
     e.stopPropagation();
-    let response = await fetch(`http://localhost:3000/admin/posts/${post.id}`, {
-      method: "DELETE",
-      headers: {
-        authorization: userToken.token,
-      },
-    });
+    let response = await fetch(
+      `https://blog-api-odin.adaptable.app/admin/posts/${post.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: userToken.token,
+        },
+      }
+    );
     props.setScreenStatus({ status: "posts" });
   }
   return (
@@ -171,19 +174,22 @@ function CreatePost(props) {
       setErrors(["your post should belong to at least one category"]);
       return;
     }
-    const response = await fetch("http://localhost:3000/admin/posts", {
-      method: "POST",
-      body: JSON.stringify({
-        title: title.value,
-        content: content.value,
-        categories: checkedValues,
-        "publish-status": publishStatus,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        authorization: userToken.token,
-      },
-    });
+    const response = await fetch(
+      "https://blog-api-odin.adaptable.app/admin/posts",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          title: title.value,
+          content: content.value,
+          categories: checkedValues,
+          "publish-status": publishStatus,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          authorization: userToken.token,
+        },
+      }
+    );
     if (response.status === 201) {
       props.setScreenStatus({ status: "posts" });
       return;
@@ -192,14 +198,16 @@ function CreatePost(props) {
   }
   return (
     <div className="create-post">
-      <button
-        onClick={() => {
-          props.setScreenStatus({ status: "posts" });
-        }}
-        className="close-btn"
-      >
-        close
-      </button>
+      <div className="close-bar">
+        <button
+          onClick={() => {
+            props.setScreenStatus({ status: "posts" });
+          }}
+          className="close-btn"
+        >
+          close
+        </button>
+      </div>
       <h1>Create Post</h1>
       <form action="" ref={form}>
         <label className="title">
@@ -259,7 +267,7 @@ function EditPost(props) {
 
   useEffect(() => {
     console.log("... executing effect");
-    fetch(`http://localhost:3000/admin/posts/${props.postId}`, {
+    fetch(`https://blog-api-odin.adaptable.app/admin/posts/${props.postId}`, {
       method: "GET",
       headers: {
         authorization: userToken.token,
@@ -308,7 +316,7 @@ function EditPost(props) {
       return;
     }
     const response = await fetch(
-      `http://localhost:3000/admin/posts/${post.id}`,
+      `https://blog-api-odin.adaptable.app/admin/posts/${post.id}`,
       {
         method: "PUT",
         body: JSON.stringify({
@@ -334,7 +342,7 @@ function EditPost(props) {
   //deleting comments
   async function deleteComment(commentId) {
     let response = await fetch(
-      `http://localhost:3000/admin/comments/${commentId}`,
+      `https://blog-api-odin.adaptable.app/admin/comments/${commentId}`,
       {
         method: "DELETE",
         headers: {
@@ -399,14 +407,16 @@ function EditPost(props) {
   }
   return (
     <div className="edit-post">
-      <button
-        onClick={() => {
-          props.setScreenStatus({ status: "posts" });
-        }}
-        className="close-btn"
-      >
-        close
-      </button>
+      <div className="close-bar">
+        <button
+          onClick={() => {
+            props.setScreenStatus({ status: "posts" });
+          }}
+          className="close-btn"
+        >
+          close
+        </button>
+      </div>
       <h1>Edit Post</h1>
       <form action="" ref={form}>
         <label className="title">
@@ -450,8 +460,14 @@ function EditPost(props) {
         </label>
         <button onClick={handleSubmit}>Update Blog</button>
       </form>
+      {errors.length !== 0 ? (
+        <div className="errors">
+          <p>{errors[0]}</p>
+        </div>
+      ) : null}
       {post.comments ? (
         <div className="comments">
+          <h2>Comments</h2>
           {post.comments.map((comment) => {
             return (
               <div className="comment">
@@ -467,11 +483,6 @@ function EditPost(props) {
               </div>
             );
           })}
-        </div>
-      ) : null}
-      {errors.length !== 0 ? (
-        <div className="errors">
-          <p>{errors[0]}</p>
         </div>
       ) : null}
     </div>

@@ -160,6 +160,11 @@ button:hover {
     display: block;
     margin: 20px 10px 50px calc(100% - 85px);
   }
+  .close-bar {
+    position: sticky;
+    top: 0px;
+    padding-top: 5px;
+  }
   h1 {
     text-align: center;
     margin: 50px 0;
@@ -238,6 +243,11 @@ button:hover {
     display: block;
     margin: 20px 10px 50px calc(100% - 85px);
   }
+  .close-bar {
+    position: sticky;
+    top: 0px;
+    padding-top: 5px;
+  }
   h1 {
     text-align: center;
     margin: 50px 0;
@@ -292,6 +302,34 @@ button:hover {
     color: red;
     text-align: center;
     margin: 30px 0;
+  }
+  .comments {
+    h2 {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .comment {
+      width: min(650px, calc(100% - 20px));
+      background-color: whitesmoke;
+      padding: 10px;
+      margin: 10px auto;
+      border: 1px solid black;
+      border-radius: 10px;
+    }
+    .comment p {
+      margin: 10px 0;
+      word-break: break-all;
+    }
+    .comment button {
+      width: 100px;
+      height: 30px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      display: block;
+      margin: 5px auto;
+    }
   }
 }
 

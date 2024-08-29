@@ -43,21 +43,24 @@ export function SignUp() {
       return;
     }
     steFetchingStatus("initiated");
-    const response = await fetch("http://localhost:3000/admin/sign-up", {
-      method: "POST",
-      body: JSON.stringify({
-        username: username.value,
-        password: password.value,
-        "admin-code": adminCode.value,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "https://blog-api-odin.adaptable.app/admin/sign-up",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username: username.value,
+          password: password.value,
+          "admin-code": adminCode.value,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     steFetchingStatus("not initiated");
     if (response.status === 201) {
       const loginResponse = await fetch(
-        `http://localhost:3000/admin/login?username=${username.value}&password=${password.value}`,
+        `https://blog-api-odin.adaptable.app/admin/login?username=${username.value}&password=${password.value}`,
         {
           method: "GET",
         }
@@ -133,7 +136,7 @@ export function Login() {
     }
     setFetchingStatus("initiated");
     const response = await fetch(
-      `http://localhost:3000/admin/login?username=${username.value}&password=${password.value}`,
+      `https://blog-api-odin.adaptable.app/admin/login?username=${username.value}&password=${password.value}`,
       {
         method: "GET",
       }
